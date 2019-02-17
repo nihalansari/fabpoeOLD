@@ -1,0 +1,238 @@
+{
+	"info": {
+		"_postman_id": "284f6f15-14b5-495b-86c2-2d1e1475e0d3",
+		"name": "POE_user_interface",
+		"description": "poe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createdoc",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"createDoc\",\r\n    \"args\": [\"{\\\"assetId\\\":\\\"4C0E997B996209B06069475E3DBE728867BA8256FBCDCD865225285C6D212A02\\\",\\\"tmspStart\\\":\\\"\\\",\\\"tmspEnd\\\":\\\"\\\",\\\"ownerId\\\":\\\"admin\\\",\\\"docDesc\\\":\\\"TEST DOCUMENT PEACE\\\"}\"],\r\n    \"chainId\": \"mychannel\",\r\n    \"txId\": \"\"\r\n}"
+				},
+				"url": "http://localhost:3000/invoke",
+				"description": "creates a new asset"
+			},
+			"response": []
+		},
+		{
+			"name": "changedocowner",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoebr\",\r\n    \"fcn\": \"changeDocOwner\",\r\n    \"args\": [\"DOC004\",\"NIHAL MA\"],\r\n    \"chainId\": \"mychannel\",\r\n    \"txId\": \"\"\r\n}"
+				},
+				"url": "http://localhost:3000/invoke",
+				"description": "creates a new asset"
+			},
+			"response": []
+		},
+		{
+			"name": "setexpiryondoc",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"setExpiryOnDoc\",\r\n    \"args\": [\"DOC006\",\"\"],\r\n    \"chainId\": \"mychannel\",\r\n    \"txId\": \"\"\r\n}"
+				},
+				"url": "http://localhost:3000/invoke",
+				"description": "creates a new asset"
+			},
+			"response": []
+		},
+		{
+			"name": "grantaccess",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"grantAccess\",\r\n    \"args\": [\"05C6E08F1D9FDAFA03147FCB8F82F124C76D2F70E3D989DC8AADB5E7D7450BEC\",\"user1\",\"user #1\"],\r\n    \"chainId\": \"mychannel\",\r\n    \"txId\": \"\"\r\n}"
+				},
+				"url": "http://localhost:3000/invoke",
+				"description": "creates a new asset"
+			},
+			"response": []
+		},
+		{
+			"name": "registeruser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"enrollmentID\": \"user1\", \r\n    \"affiliation\" : \"org1.department1\"\r\n}"
+				},
+				"url": "http://localhost:3000/registeruser",
+				"description": "creates a new asset"
+			},
+			"response": []
+		},
+		{
+			"name": "queryalldocs",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"queryAllDocs\",\r\n    \"args\": [],\r\n    \"chainId\": \"mychannel\"\r\n}"
+				},
+				"url": "http://localhost:3000/query",
+				"description": "read all assets"
+			},
+			"response": []
+		},
+		{
+			"name": "queryDocHistory",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"getDocHistory\",\r\n    \"args\": [\"4C0E997B996209B06069475E3DBE728867BA8256FBCDCD865225285C6D212A02\"],\r\n    \"chainId\": \"mychannel\"\r\n}"
+				},
+				"url": "http://localhost:3000/query",
+				"description": "read all assets"
+			},
+			"response": []
+		},
+		{
+			"name": "queryalldocsShared",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"queryAllDocsShared\",\r\n    \"args\": [\"user1\"],\r\n    \"chainId\": \"mychannel\"\r\n}"
+				},
+				"url": "http://localhost:3000/query",
+				"description": "read all assets"
+			},
+			"response": []
+		},
+		{
+			"name": "querySchema",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoebr\",\r\n    \"fcn\": \"querySchema\",\r\n    \"args\": [],\r\n    \"chainId\": \"mychannel\"\r\n}"
+				},
+				"url": "http://localhost:3000/query",
+				"description": "read all assets"
+			},
+			"response": []
+		},
+		{
+			"name": "querydoc",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"queryDoc\",\r\n    \"args\": [\"4C0E997B996209B06069475E3DBE728867BA8256FBCDCD865225285C6D212A02\"],\r\n    \"chainId\": \"mychannel\"\r\n}"
+				},
+				"url": "http://localhost:3000/query",
+				"description": "read all assets"
+			},
+			"response": []
+		},
+		{
+			"name": "richQuery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chaincodeId\": \"fabpoe\",\r\n    \"fcn\": \"queryDoc\",\r\n    \"args\": [\"DOC006\"],\r\n    \"chainId\": \"mychannel\"\r\n}"
+				},
+				"url": "http://localhost:3000/query",
+				"description": "read all assets"
+			},
+			"response": []
+		},
+		{
+			"name": "api",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:3000/api",
+				"description": "read all assets"
+			},
+			"response": []
+		}
+	]
+}

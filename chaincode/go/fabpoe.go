@@ -2,6 +2,18 @@
  * DocSHARE source chaincode
  */
 
+/******************************** AMENDMENT HISTORY **********************************************/
+/*	DATE		Version		Description
+/******************************** AMENDMENT HISTORY **********************************************/
+/*	Sep 2018	0		Initial Development
+/*	
+/*	15 Feb 2019	1		Changes wrt fabric new release	
+/*
+/*
+/******************************** AMENDMENT HISTORY **********************************************/
+
+
+
 package main
 
 /* Imports
@@ -25,28 +37,39 @@ type SmartContract struct {
 
 // Define the Doc structure, with 4 properties.  Structure tags are used by encoding/json library
 type Asset struct {
-	AssetId   			string 		`json:"assetId"`
+	AssetId   			string 		`json:"assetId"`	//this is the 40 byte hash of the document
 	TmspStart 			string 		`json:"tmspStart"`
 	TmspEnd 			string 		`json:"tmspEnd"`
 	AccessList			[]AssetACL 	`json:"accessList"`
-	DocHash				string      `json:"docHash"`
-	OwnerId				string      `json:"ownerId"`	
-	DocDesc				string      `json:"docDesc"`	
+	//DocHash				string      	`json:"docHash"`
+	OwnerId				string      	`json:"ownerId"`	
+	DocTitle			string      	`json:"docTitle"`	
 }
 
 type AssetACL struct {
 
-	UserId   			string 		`json:"userId"`
-	AccessGrantTmsp 	string      `json:"accessGrantTmsp"`
+	UserId   		string 		`json:"userId"`
+	AccessGrantTmsp 	string      	`json:"accessGrantTmsp"`
 	UserDescription		string 		`json:"userDescription"` 
-	AccessToFields		string 		`json:"accessToFields"` //map with boolean 
+	AccessToFields		string 		`json:"accessToFields"` //optional as we have too few fields.map with boolean 
 }
+
 
 type internalResp struct {
 		Status 		int
 		Message 	string
 		Payload		Asset
 }
+
+
+//List of documents the logged in user has access to 
+type UserACL struct {
+
+	UserId   		string 		`json:"userId"`
+	AssetId			[]string 	`json:"assetId"` 
+}
+
+
 
 
 /*
@@ -88,7 +111,10 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.getDocHistory(APIstub, args)				//returns the empty asset structure to caller 
 	} else if function == "executeRichQuery" {				//end timestamp the document. no more valid after this.
 		return s.executeRichQuery(APIstub, args)				//returns the empty asset structure to caller 
-	}
+	} else if function == "queryAllDocsShared" {				//end timestamp the document. no more valid after this.
+		return s.queryAllDocsShared(APIstub, args)				//NOTE: the calling userId should be extracted from 
+											//private key using cid package 
+	} 
 
 	fmt.Println(function + " Not found")
 	return shim.Error("Invalid Smart Contract function name.")
@@ -134,9 +160,9 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 	acl = append(acl, AssetACL{})
 
 	assets := []Asset{
-		Asset{AssetId: "DTMMDDYY01", 	TmspStart: "", 	TmspEnd: "", 	DocHash: "ABCDBACCDAB43432BC", OwnerId: "initLedger", AccessList :acl},
-		Asset{AssetId: "DTMMDDYY02", 	TmspStart: "", 	TmspEnd: "", 	DocHash: "ABCDBACCDAB4AAA2BC", OwnerId: "initLedger", AccessList :acl},
-		Asset{AssetId: "DTMMDDYY03", 	TmspStart: "", 	TmspEnd: "", 	DocHash: "DCCDDBACCDAB43432A", OwnerId: "initLedger", AccessList :acl},
+		Asset{AssetId: "ABCDEF0123456789ABCDEF0123456789000000A1", 	TmspStart: "", 	TmspEnd: "", 	DocTitle: "Partnership agreement XTECH", OwnerId: "initLedger", AccessList :acl},
+		Asset{AssetId: "ABCDEF0123456789ABCDEF0123456789000000A3", 	TmspStart: "", 	TmspEnd: "", 	DocTitle: "Lease Agreement Suresh", OwnerId: "initLedger", AccessList :acl},
+		Asset{AssetId: "ABCDEF0123456789ABCDEF0123456789000000A2", 	TmspStart: "", 	TmspEnd: "", 	DocTitle: "NDA for Docify", OwnerId: "initLedger", AccessList :acl},
 	}
 
 	i := 0
@@ -203,9 +229,9 @@ func validateInput(docIn Asset) string {
     	msg += "|Document ID cannot be empty"
 	} 
 
-	if docIn.DocHash == ""  {
-    	msg += "|Document hash cannot be empty"
-	}
+	//if docIn.DocHash == ""  {
+    	//msg += "|Document hash cannot be empty"
+	//}
 
 	// Add future validations over here
 	//	ownerId				string      `json:"ownerId"`	
@@ -220,7 +246,7 @@ func (s *SmartContract) queryAllDocs(APIstub shim.ChaincodeStubInterface) sc.Res
 
 	//Note: AssetID will be a combination of a prefix + creation timestamp
 	startKey := ""
-	endKey   := "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
+	endKey   := ""
 
 	resultsIterator, err := APIstub.GetStateByRange(startKey, endKey)
 	if err != nil {
@@ -260,13 +286,35 @@ func (s *SmartContract) queryAllDocs(APIstub shim.ChaincodeStubInterface) sc.Res
 	return shim.Success(buffer.Bytes())
 }
 
+func (s *SmartContract) queryAllDocsShared(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+
+	if len(args) != 1 {
+		return shim.Error("queryAllDocsShared: Incorrect number of arguments. Expecting 1")
+	}
+	userId := args[0]
+
+	UsrAsBytes, _ := APIstub.GetState(userId)
+	if UsrAsBytes == nil {
+		
+		fmt.Println("###############DocAsBytes Empty")
+		fmt.Println("No record found for UserId=" + userId)
+		return shim.Error("No record found for userId=" + userId)
+	}
+
+	fmt.Println("queryDoc Success")
+	return shim.Success(UsrAsBytes)
+
+}
+
+
 func (s *SmartContract) changeDocOwner(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
 
-	//Important: Check if hte document has been terminated timestamped already. 
+	//Important: Check if hte document has been terminate timestamped already. 
 	//If yes, allow no further updates to this document
 	resp := s.checkIfTerminated(APIstub,args[0])
 	if resp.Status != 0 {  //Note that nil means error
@@ -328,6 +376,8 @@ func (s *SmartContract) setExpiryOnDoc(APIstub shim.ChaincodeStubInterface, args
 //add a user to the Access list of this document
 func (s *SmartContract) grantAccess(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
+	//Step1: Add userId the asset's entry on ledger
+	//Step2: Add this document'assetId to the user list of docs on the ledger
 	if len(args) != 3 {
 		return shim.Error("grantAccess: Incorrect number of arguments. Expecting 2")
 	}	
@@ -335,6 +385,8 @@ func (s *SmartContract) grantAccess(APIstub shim.ChaincodeStubInterface, args []
 	if args[0] == "" || args[1] == "" {
 		return shim.Error("grantAccess: assetId and userID cannot be empty")	
 	}
+	assetId := args[0]
+	userId := args[1]
 
 	//Important: Check if hte document has been terminated timestamped already. 
 	//If yes, allow no further updates to this document
@@ -358,13 +410,39 @@ func (s *SmartContract) grantAccess(APIstub shim.ChaincodeStubInterface, args []
 	
 	DocAsBytes, err := json.Marshal(Doc)
 	if err != nil {
-		return shim.Error("setExpiryOnDoc: Marshal error :" + err.Error())
+		return shim.Error("share asset: Marshal error :" + err.Error())
 	}
 	APIstub.PutState(Doc.AssetId, DocAsBytes)
+
+	var Usr UserACL
+	UsrAsBytes, _ := APIstub.GetState(userId)
+	if UsrAsBytes == nil {
+		Usr = UserACL{}
+		Usr.UserId = userId
+		Usr.AssetId = append(Usr.AssetId,assetId)		
+	} else {
+		json.Unmarshal(UsrAsBytes, &Usr)
+		Usr.AssetId = append(Usr.AssetId,assetId)		
+	}
+
+	//write this record too on the ledger
+	UsrAsBytes, err = json.Marshal(Usr)
+	if err != nil {
+		return shim.Error("User list: Marshal error :" + err.Error())
+	}
+	APIstub.PutState(Usr.UserId, UsrAsBytes)
+
 
 	return shim.Success(nil)
 }
 
+
+//List of documents the logged in user has access to 
+//type UserACL struct {
+//
+//	UserId   		string 		`json:"userId"`
+//	AssetId			[]string 	`json:"assetId"` 
+//}
 
 
 //=================================================================================================
@@ -503,6 +581,9 @@ func (s *SmartContract) checkIfTerminated(stub shim.ChaincodeStubInterface, asse
 	fmt.Println(resp.Message)
 	return resp
 }
+
+
+
 // The main function is only relevant in unit test mode. Only included here for completeness.
 func main() {
 
