@@ -1,0 +1,563 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "POE_user_interface",
+    "description": "There are only 3 chaincode endpoints: 1) registeruser 2) invoke 3) query. All these are POST requests where body of the request could be as defined in the models(Scroll below for details of models).",
+    "contact": {}
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/invoke": {
+      "post": {
+        "description": "creates a new asset",
+        "summary": "createdoc",
+        "tags": [
+          "Misc"
+        ],
+        "operationId": "InvokePost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/createdocRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/registeruser": {
+      "post": {
+        "description": "creates a new asset",
+        "summary": "registeruser",
+        "tags": [
+          "Misc"
+        ],
+        "operationId": "RegisteruserPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/registeruserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/query": {
+      "post": {
+        "description": "read all assets",
+        "summary": "queryalldocs",
+        "tags": [
+          "Misc"
+        ],
+        "operationId": "QueryPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/queryalldocsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/api": {
+      "get": {
+        "description": "read all assets",
+        "summary": "api",
+        "tags": [
+          "Misc"
+        ],
+        "operationId": "ApiGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "createdocRequest": {
+      "title": "createdocRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "createDoc",
+        "args": [
+          "{\"assetId\":\"4C0E997B996209B06069475E3DBE728867BA8256FBCDCD865225285C6D212A02\",\"tmspStart\":\"\",\"tmspEnd\":\"\",\"ownerId\":\"admin\",\"docDesc\":\"TEST DOCUMENT PEACE\"}"
+        ],
+        "chainId": "mychannel",
+        "txId": ""
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        },
+        "txId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId",
+        "txId"
+      ]
+    },
+    "changedocownerRequest": {
+      "title": "changedocownerRequest",
+      "example": {
+        "chaincodeId": "fabpoebr",
+        "fcn": "changeDocOwner",
+        "args": [
+          "DOC004",
+          "NIHAL MA"
+        ],
+        "chainId": "mychannel",
+        "txId": ""
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        },
+        "txId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId",
+        "txId"
+      ]
+    },
+    "setexpiryondocRequest": {
+      "title": "setexpiryondocRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "setExpiryOnDoc",
+        "args": [
+          "DOC006",
+          ""
+        ],
+        "chainId": "mychannel",
+        "txId": ""
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        },
+        "txId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId",
+        "txId"
+      ]
+    },
+    "grantaccessRequest": {
+      "title": "grantaccessRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "grantAccess",
+        "args": [
+          "05C6E08F1D9FDAFA03147FCB8F82F124C76D2F70E3D989DC8AADB5E7D7450BEC",
+          "user1",
+          "user #1"
+        ],
+        "chainId": "mychannel",
+        "txId": ""
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        },
+        "txId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId",
+        "txId"
+      ]
+    },
+    "registeruserRequest": {
+      "title": "registeruserRequest",
+      "example": {
+        "enrollmentID": "user1",
+        "affiliation": "org1.department1"
+      },
+      "type": "object",
+      "properties": {
+        "enrollmentID": {
+          "type": "string"
+        },
+        "affiliation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "enrollmentID",
+        "affiliation"
+      ]
+    },
+    "queryalldocsRequest": {
+      "title": "queryalldocsRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "queryAllDocs",
+        "args": [],
+        "chainId": "mychannel"
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId"
+      ]
+    },
+    "queryDocHistoryRequest": {
+      "title": "queryDocHistoryRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "getDocHistory",
+        "args": [
+          "4C0E997B996209B06069475E3DBE728867BA8256FBCDCD865225285C6D212A02"
+        ],
+        "chainId": "mychannel"
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId"
+      ]
+    },
+    "queryalldocsSharedRequest": {
+      "title": "queryalldocsSharedRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "queryAllDocsShared",
+        "args": [
+          "user1"
+        ],
+        "chainId": "mychannel"
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId"
+      ]
+    },
+    "querySchemaRequest": {
+      "title": "querySchemaRequest",
+      "example": {
+        "chaincodeId": "fabpoebr",
+        "fcn": "querySchema",
+        "args": [],
+        "chainId": "mychannel"
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId"
+      ]
+    },
+    "querydocRequest": {
+      "title": "querydocRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "queryDoc",
+        "args": [
+          "4C0E997B996209B06069475E3DBE728867BA8256FBCDCD865225285C6D212A02"
+        ],
+        "chainId": "mychannel"
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId"
+      ]
+    },
+    "richQueryRequest": {
+      "title": "richQueryRequest",
+      "example": {
+        "chaincodeId": "fabpoe",
+        "fcn": "queryDoc",
+        "args": [
+          "DOC006"
+        ],
+        "chainId": "mychannel"
+      },
+      "type": "object",
+      "properties": {
+        "chaincodeId": {
+          "type": "string"
+        },
+        "fcn": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "chainId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chaincodeId",
+        "fcn",
+        "args",
+        "chainId"
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "Misc",
+      "description": ""
+    }
+  ]
+}

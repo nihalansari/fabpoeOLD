@@ -15,10 +15,29 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 })); 
 
 
-app.get('/api', function(req, res) {
+
+
+//return the API documentation in one of the several formats
+app.get('/api/postman', function(req, res) {
 		console.log("In endpoint api");
         
 		var rawdata = fs.readFileSync('./Testing/POE.postman_collection.json');
+				res.end(rawdata);
+			
+}); 
+
+app.get('/api/swagger', function(req, res) {
+		console.log("In endpoint api");
+        
+		var rawdata = fs.readFileSync('./Testing/swagger.json');
+				res.end(rawdata);
+			
+}); 
+
+app.get('/api/swaggeryaml', function(req, res) {
+		console.log("In endpoint api");
+        
+		var rawdata = fs.readFileSync('./Testing/swagger.yaml');
 				res.end(rawdata);
 			
 }); 
