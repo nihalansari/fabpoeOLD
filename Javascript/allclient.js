@@ -4,11 +4,11 @@
 
 'use strict';
 
-const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
+
 
 const FabricCAServices = require('fabric-ca-client');
 
-const { FileSystemWallet, Gateway } = require('fabric-network');
+const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
